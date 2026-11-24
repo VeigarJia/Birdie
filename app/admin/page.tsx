@@ -82,7 +82,9 @@ export default function AdminPage() {
       }
       return false;
     },
-    [accessKey],
+    // Only stable callbacks here: depending on a per-render object re-created `load`
+    // on every render and made the effect below refetch in a loop.
+    [accessKey.clear],
   );
 
   const load = useCallback(async () => {

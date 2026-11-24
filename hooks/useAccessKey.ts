@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { loadAccessKey, saveAccessKey } from "@/lib/preferences";
 
 /** Birdie's own API key (not a UniMelb credential), kept in LocalStorage. */
@@ -23,5 +23,6 @@ export function useAccessKey() {
     setKey(null);
   }, []);
 
-  return { key, loaded, save, clear };
+  // Memoized: callers may use the whole object as an effect dependency.
+  return useMemo(() => ({ key, loaded, save, clear }), [key, loaded, save, clear]);
 }
