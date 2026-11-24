@@ -121,7 +121,7 @@ export default function Home() {
         )}
         {noneFree && <p className="mt-3 text-sm text-muted">No available courts in this time range.</p>}
         <StatusLegend showUnknown={rows.some((r) => r.incomplete)} />
-        <p className="mt-3 mb-6 text-xs text-muted">Tap an available slot to book on the official site.</p>
+        <p className="mt-3 mb-6 text-xs text-muted">Tap an available slot to open that court&apos;s booking page for the day.</p>
       </>
     );
   }

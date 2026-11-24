@@ -14,7 +14,7 @@ export function AvailabilityCell({ cell, time, clickable }: { cell: MatrixCell; 
             href={cell.bookingUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`Book court ${name} at ${time}`}
+            aria-label={`Court ${name} free at ${time}: open booking page`}
             className={`${base} bg-available-bg font-semibold text-available-fg active:brightness-90`}
           >
             ✓

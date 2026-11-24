@@ -11,6 +11,8 @@ export interface BookingService {
 /**
  * Level 2: exact-slot link, built exactly like the official landing page's `createBookingLink`.
  * The user lands on the booking form for that court and start time (after logging in).
+ * Verified on device 2026-11-24, but not used: it fixes the booking at 30 minutes.
+ * Birdie links to facilityDateUrl instead so users can choose a longer duration.
  */
 export function exactSlotUrl(facilityId: string, date: string, startMinutes: number, service: BookingService): string {
   const u = new URL(PM_PATHS.booking, PM_ORIGIN);
@@ -28,7 +30,7 @@ export function exactSlotUrl(facilityId: string, date: string, startMinutes: num
   return u.href;
 }
 
-/** Level 1: the court's landing page opened on the chosen date. */
+/** Level 1 (used): the court's landing page opened on the chosen date; duration and time are picked there. */
 export function facilityDateUrl(facilityId: string, date: string): string {
   const u = new URL(PM_PATHS.landing, PM_ORIGIN);
   u.searchParams.set("facilityId", facilityId);

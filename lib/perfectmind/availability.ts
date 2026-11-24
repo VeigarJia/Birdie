@@ -3,7 +3,7 @@ import { TtlCache, mapLimit } from "../cache";
 import { melbourneToInstant, toHHMM } from "../time";
 import { UpstreamError } from "./client";
 import { PM_CALENDAR_ID, PM_PATHS, PM_WIDGET_ID } from "./config";
-import { exactSlotUrl } from "./booking";
+import { facilityDateUrl } from "./booking";
 import { expandSlots, normalizeDay, type PmAvailabilityResponse } from "./parser";
 import { getContext, resetContext, type PmContext } from "./session";
 import type { AvailabilityResponse, Facility, FacilityAvailability } from "@/types";
@@ -37,14 +37,16 @@ function toFacilityAvailability(
     // Day absent from a successful response: nothing bookable (e.g. later today, or outside the window).
     return { facility, status: "success", updatedAt: fetchedAt, openingTime: null, closingTime: null, slots: [] };
   }
+  // Level 1 link (court + date): the user picks duration (30–120 min) and start time on the official page.
+  const courtDayUrl = facilityDateUrl(facility.id, date);
   const slots = expandSlots(day).map((s) => {
     const available = s.status === "available";
     return {
       start: toHHMM(s.startMinutes),
       end: toHHMM(s.startMinutes + 30),
       status: s.status,
-      bookingUrl: available ? exactSlotUrl(facility.id, date, s.startMinutes, ctx.service) : null,
-      bookingLinkType: available ? ("exact-slot" as const) : null,
+      bookingUrl: available ? courtDayUrl : null,
+      bookingLinkType: available ? ("facility-date" as const) : null,
     };
   });
   return {
