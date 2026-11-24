@@ -51,9 +51,12 @@ iPhone PWA ──(Bearer key)──> /api/availability?date=YYYY-MM-DD ──> P
 | Booking window | 14 days ahead; later days return `IsDisabled` spots (treated as unavailable) |
 | Exact-slot link (Level 2) | `FacilityBooking?...&startDateTimeTicks=` (same as the official page). Anonymous visits redirect to `MemberSignIn`, keeping all parameters |
 
-### Still to verify by hand
+### Verified on device / in production (2026-11-24)
 
-- [ ] After logging in from a Birdie link, you land on the right court and time, ready to book.
-- [ ] In the iPhone home-screen app (standalone), the official login persists between taps.
+- [x] After logging in from a Birdie link, you land on the right court and time, ready to book (Level 2 works).
+- [x] In the iPhone home-screen app (standalone), the official login persists between taps.
+- [x] The deployed `syd1` function can reach PerfectMind (no datacenter IP blocking). Responses take about 5 s.
+
+### Still open
+
 - [ ] Same-day results: today's response was empty at 17:05. Confirm next morning whether that means fully booked or no same-day online booking.
-- [ ] The deployed `syd1` function can reach PerfectMind (no datacenter IP blocking).

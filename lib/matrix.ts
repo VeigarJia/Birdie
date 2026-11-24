@@ -1,4 +1,12 @@
-import { DATA_EXPIRED_AFTER_SECONDS, DATA_STALE_AFTER_SECONDS, DEFAULT_CLOSING_TIME, DEFAULT_OPENING_TIME, SLOT_DURATION_MINUTES } from "./constants";
+import {
+  DATA_EXPIRED_AFTER_SECONDS,
+  DATA_STALE_AFTER_SECONDS,
+  DEFAULT_CLOSING_TIME,
+  DEFAULT_END_TIME,
+  DEFAULT_OPENING_TIME,
+  DEFAULT_START_TIME,
+  SLOT_DURATION_MINUTES,
+} from "./constants";
 import { buildTimeRows, toHHMM, toMinutes } from "./time";
 import type { AvailabilityResponse, CellDisplayStatus, DataFreshness, Facility } from "@/types";
 
@@ -27,7 +35,7 @@ export function openingRange(data: AvailabilityResponse | null): { open: string;
   };
 }
 
-/** Keep a saved range inside opening hours and non-empty. */
+/** Keep a saved range (or the 16:00–18:00 default) inside opening hours and non-empty. */
 export function clampRange(
   start: string | undefined,
   end: string | undefined,
@@ -37,8 +45,8 @@ export function clampRange(
   const o = toMinutes(open);
   const c = toMinutes(close);
   const snap = (m: number) => Math.round(m / SLOT_DURATION_MINUTES) * SLOT_DURATION_MINUTES;
-  let s = start ? snap(toMinutes(start)) : o;
-  let e = end ? snap(toMinutes(end)) : c;
+  let s = snap(toMinutes(start ?? DEFAULT_START_TIME));
+  let e = snap(toMinutes(end ?? DEFAULT_END_TIME));
   s = Math.min(Math.max(s, o), c - SLOT_DURATION_MINUTES);
   e = Math.min(Math.max(e, s + SLOT_DURATION_MINUTES), c);
   return { startTime: toHHMM(s), endTime: toHHMM(e) };

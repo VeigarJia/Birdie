@@ -64,8 +64,9 @@ describe("buildMatrix", () => {
 });
 
 describe("clampRange / openingRange", () => {
-  it("defaults to full opening hours", () => {
-    expect(clampRange(undefined, undefined, "07:00", "22:00")).toEqual({ startTime: "07:00", endTime: "22:00" });
+  it("defaults to 16:00–18:00, clamped to opening hours", () => {
+    expect(clampRange(undefined, undefined, "07:00", "22:00")).toEqual({ startTime: "16:00", endTime: "18:00" });
+    expect(clampRange(undefined, undefined, "07:00", "17:00")).toEqual({ startTime: "16:00", endTime: "17:00" });
   });
   it("keeps saved ranges inside opening hours and non-empty", () => {
     expect(clampRange("06:00", "23:00", "07:00", "22:00")).toEqual({ startTime: "07:00", endTime: "22:00" });

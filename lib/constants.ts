@@ -13,6 +13,10 @@ export const BOOKING_WINDOW_DAYS = 14;
 export const DEFAULT_OPENING_TIME = "07:00";
 export const DEFAULT_CLOSING_TIME = "22:00";
 
+/** Time range shown before the user picks one. Only filters the view; it does not change upstream requests. */
+export const DEFAULT_START_TIME = "16:00";
+export const DEFAULT_END_TIME = "18:00";
+
 // Backend cache
 export const AVAILABILITY_CACHE_TTL_SECONDS = 30;
 export const FAILED_CACHE_TTL_SECONDS = 5;
