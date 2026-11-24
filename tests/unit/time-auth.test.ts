@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { checkAccessKey } from "@/lib/auth";
+import { checkAccessKey, parseAccessKeys } from "@/lib/auth";
 import { exactSlotUrl, facilityDateUrl } from "@/lib/perfectmind/booking";
 import { addDays, buildTimeRows, formatDisplayDate, melbourneNow, melbourneToInstant } from "@/lib/time";
 import { validateDate } from "@/lib/validation";
@@ -36,16 +36,40 @@ describe("validateDate", () => {
   });
 });
 
-describe("checkAccessKey", () => {
-  it("fails closed when no key is configured", () => {
-    expect(checkAccessKey("Bearer x", "")).toMatchObject({ ok: false, status: 500 });
+describe("access keys", () => {
+  const A = "aaaaaaaaaaaaaaaaaaaaaaaa";
+  const B = "bbbbbbbbbbbbbbbbbbbbbbbb+/=";
+  const LEGACY = "llllllllllllllllllllllll";
+  const keys = parseAccessKeys({ BIRDIE_ACCESS_KEYS: ` me:${A} , group-1:${B} `, BIRDIE_ACCESS_KEY: LEGACY });
+
+  it("parses named keys plus the legacy key as owner", () => {
+    expect(keys.map((k) => k.name)).toEqual(["me", "group-1", "owner"]);
   });
-  it("accepts only the exact bearer key", () => {
-    expect(checkAccessKey("Bearer s3cret", "s3cret")).toEqual({ ok: true });
-    expect(checkAccessKey("bearer s3cret", "s3cret")).toEqual({ ok: true });
-    expect(checkAccessKey("Bearer wrong", "s3cret")).toMatchObject({ ok: false, status: 401 });
-    expect(checkAccessKey("s3cret", "s3cret")).toMatchObject({ ok: false, status: 401 });
-    expect(checkAccessKey(null, "s3cret")).toMatchObject({ ok: false, status: 401 });
+
+  it("identifies which named key was used", () => {
+    expect(checkAccessKey(`Bearer ${A}`, keys)).toEqual({ ok: true, name: "me" });
+    expect(checkAccessKey(`bearer ${B}`, keys)).toEqual({ ok: true, name: "group-1" });
+    expect(checkAccessKey(`Bearer ${LEGACY}`, keys)).toEqual({ ok: true, name: "owner" });
+  });
+
+  it("rejects wrong, missing or malformed credentials", () => {
+    expect(checkAccessKey("Bearer wrong-key-wrong-key", keys)).toMatchObject({ ok: false, status: 401 });
+    expect(checkAccessKey(A, keys)).toMatchObject({ ok: false, status: 401 });
+    expect(checkAccessKey(null, keys)).toMatchObject({ ok: false, status: 401 });
+  });
+
+  it("skips malformed entries (bad name, short key, missing colon)", () => {
+    const parsed = parseAccessKeys({ BIRDIE_ACCESS_KEYS: `bad name:${A},short:abc,${A},ok:${A}` });
+    expect(parsed.map((k) => k.name)).toEqual(["ok"]);
+  });
+
+  it("fails closed when no key is configured", () => {
+    expect(checkAccessKey(`Bearer ${A}`, parseAccessKeys({}))).toMatchObject({ ok: false, status: 500 });
+  });
+
+  it("a removed key stops working", () => {
+    const after = parseAccessKeys({ BIRDIE_ACCESS_KEYS: `group-1:${B}` });
+    expect(checkAccessKey(`Bearer ${A}`, after)).toMatchObject({ ok: false, status: 401 });
   });
 });
 

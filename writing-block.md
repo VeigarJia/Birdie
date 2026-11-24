@@ -975,18 +975,20 @@ Birdie 仅供个人使用，后端接口使用一个共享访问密钥保护，�
 
 ### 服务端
 
-- 密钥保存在环境变量 `BIRDIE_ACCESS_KEY` 中，不提交到代码仓库。
-- 密钥使用足够长的随机字符串，例如 `openssl rand -base64 32` 生成。
+- 支持多个密钥，每人或每组一个，保存在环境变量 `BIRDIE_ACCESS_KEYS` 中，格式为 `name:key,name:key`，不提交到代码仓库。
+- 旧的单密钥变量 `BIRDIE_ACCESS_KEY` 继续有效，在日志中记为 `owner`。
+- 使用 `npm run key -- <name>` 生成密钥（32 字节随机数，URL-safe base64，不含 `:` 和 `,`）。
+- name 仅用于日志标识（字母、数字、`-`、`_`），密钥长度至少 16 位，格式错误的条目会被忽略。
 - 所有 `/api/*` 请求必须携带请求头：
 
 ```text
-Authorization: Bearer <BIRDIE_ACCESS_KEY>
+Authorization: Bearer <key>
 ```
 
 - 使用常量时间比较（`crypto.timingSafeEqual`）校验密钥。
 - 密钥缺失或错误时返回 `401`，不进行任何上游请求。
-- 日志中不记录密钥内容。
-- 未配置 `BIRDIE_ACCESS_KEY` 时，后端拒绝所有 API 请求，不能默认放行。
+- 日志中只记录密钥的 name，不记录密钥内容。
+- 两个变量都未配置时，后端拒绝所有 API 请求，不能默认放行。
 
 ### 客户端
 
@@ -996,9 +998,9 @@ Authorization: Bearer <BIRDIE_ACCESS_KEY>
 - 密钥输入框是页面内的一次性状态，不构成独立的设置页面或登录页面。
 - 静态页面本身不需要保护，只保护 API。
 
-### 更换密钥
+### 新增与删除密钥
 
-修改 Vercel 环境变量并重新部署即可。旧密钥立即失效，客户端会收到 `401` 并提示重新输入。
+在 Vercel 中编辑 `BIRDIE_ACCESS_KEYS`，增加或删除对应的 `name:key` 条目，然后重新部署。被删除的密钥立即失效，对应客户端收到 `401` 后提示重新输入，其他用户不受影响。
 
 ## 10.2 获取指定日期的可预订信息
 

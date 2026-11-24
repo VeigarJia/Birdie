@@ -21,8 +21,12 @@ export async function GET(request: Request) {
   const invalid = validateDate(date);
   if (invalid) return error(400, "INVALID_DATE", invalid, false);
 
+  const refresh = params.get("refresh") === "true";
+  // Who is using Birdie (key name only, never the key itself).
+  console.info(`[birdie] request key=${auth.name} date=${date}${refresh ? " refresh" : ""}`);
+
   try {
-    const data = await getAvailability(date!, { refresh: params.get("refresh") === "true" });
+    const data = await getAvailability(date!, { refresh });
     return Response.json(data, { headers: { "Cache-Control": "no-store" } });
   } catch (err) {
     console.error(`[birdie] /api/availability ${date}: ${(err as Error).message}`);

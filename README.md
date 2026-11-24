@@ -136,23 +136,57 @@ Birdie 需要联网才能获取实时空场信息。恢复联网之前，预订�
 
 ```bash
 npm install
-cp .env.example .env.local      # then set BIRDIE_ACCESS_KEY
+cp .env.example .env.local      # then set BIRDIE_ACCESS_KEYS
 npm run dev                     # http://localhost:3000
 npm test                        # unit tests
 npm run typecheck
 npm run icons                   # regenerate PWA icons from 🏸 (macOS)
+npm run key -- <name>           # generate an access key for someone
 ```
-
-Generate an access key with `openssl rand -base64 32`. The first time you open the app on a device, it asks for this key and stores it in LocalStorage.
 
 ## Deploy (Vercel)
 
 1. Import the GitHub repo into Vercel.
-2. Set the `BIRDIE_ACCESS_KEY` environment variable (Production).
+2. Set the `BIRDIE_ACCESS_KEYS` environment variable (see below).
 3. Deploy. `vercel.json` pins Functions to `syd1` (Sydney).
 4. On iPhone, open the URL in Safari → Share → **Add to Home Screen**, then enter the key once.
 
-To rotate the key, change the env var and redeploy; devices will prompt again.
+## Access keys
+
+Every API request needs a key. Each person or group gets their own, so one can be revoked without affecting the others.
+
+**Where they live**
+
+| Place | What |
+| --- | --- |
+| Vercel → Project → Settings → Environment Variables | `BIRDIE_ACCESS_KEYS`: the source of truth, as `name:key,name:key` |
+| Vercel (same page) | `BIRDIE_ACCESS_KEY`: optional legacy single key, logged as `owner` |
+| Each user's device | The key they typed, in that browser's LocalStorage |
+| `.env.local` (your machine, git-ignored) | Keys for local development only |
+
+**Add a key**
+
+1. Run `npm run key -- alice`. It prints a key for Alice and the entry `alice:<key>`.
+2. In Vercel, edit `BIRDIE_ACCESS_KEYS` and append `,alice:<key>` (comma-separated, no spaces needed).
+3. **Redeploy** (Deployments → ⋯ → Redeploy). Env changes only apply to new deployments.
+4. Send Alice the key.
+
+Names may use letters, digits, `-` and `_`. Keys must be at least 16 characters; the generator makes 43-character URL-safe keys with no `:` or `,`.
+
+**See existing keys**
+
+In Vercel, open Settings → Environment Variables and click the eye icon on `BIRDIE_ACCESS_KEYS`. Birdie itself never displays or logs key values.
+
+**See who is using Birdie**
+
+Vercel → Project → Logs. Each request logs the key's name, e.g. `[birdie] request key=alice date=2026-11-25`.
+
+**Revoke a key**
+
+1. In Vercel, edit `BIRDIE_ACCESS_KEYS` and delete that person's `name:key` entry.
+2. Redeploy.
+
+Their next request gets `401`, the app clears the stored key and asks for a new one. Everyone else keeps working.
 
 ## How it works
 

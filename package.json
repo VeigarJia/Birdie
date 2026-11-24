@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "probe": "node --experimental-strip-types scripts/test-perfectmind.ts",
-    "icons": "osascript -l JavaScript scripts/generate-icons.js \"$PWD\""
+    "icons": "osascript -l JavaScript scripts/generate-icons.js \"$PWD\"",
+    "key": "node scripts/new-access-key.mjs"
   },
   "dependencies": {
     "next": "16.4.6",
