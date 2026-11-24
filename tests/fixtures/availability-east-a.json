@@ -1,0 +1,286 @@
+{
+ "availabilities": [
+  {
+   "Date": "/Date(1795564800000)/",
+   "OpeningTime": {
+    "TotalMinutes": 420
+   },
+   "ClosingTime": {
+    "TotalMinutes": 1320
+   },
+   "BookingGroups": [
+    {
+     "Name": "Morning",
+     "AvailableSpots": [
+      {
+       "Time": {
+        "TotalMinutes": 420
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 450
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 480
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 510
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 540
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 570
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 600
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 630
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 660
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 690
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      }
+     ]
+    },
+    {
+     "Name": "Afternoon",
+     "AvailableSpots": [
+      {
+       "Time": {
+        "TotalMinutes": 930
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      }
+     ]
+    },
+    {
+     "Name": "Late",
+     "AvailableSpots": [
+      {
+       "Time": {
+        "TotalMinutes": 1080
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "Date": "/Date(1795651200000)/",
+   "OpeningTime": {
+    "TotalMinutes": 420
+   },
+   "ClosingTime": {
+    "TotalMinutes": 1320
+   },
+   "BookingGroups": [
+    {
+     "Name": "Morning",
+     "AvailableSpots": [
+      {
+       "Time": {
+        "TotalMinutes": 420
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 450
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 480
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 510
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 540
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 570
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 600
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 630
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 660
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 690
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      }
+     ]
+    },
+    {
+     "Name": "Afternoon",
+     "AvailableSpots": [
+      {
+       "Time": {
+        "TotalMinutes": 720
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 750
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 1020
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      },
+      {
+       "Time": {
+        "TotalMinutes": 1050
+       },
+       "Duration": {
+        "TotalMinutes": 30
+       },
+       "IsDisabled": false
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "extraDaysInfo": null
+}
