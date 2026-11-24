@@ -42,7 +42,7 @@ export default function Home() {
     setKeyRejected(true);
   }, [accessKey]);
 
-  const { data, loading, error, refresh } = useAvailability(date, accessKey.key, onUnauthorized);
+  const { data, loading, error, isAdmin, refresh } = useAvailability(date, accessKey.key, onUnauthorized);
 
   const { open, close } = openingRange(data);
   const { startTime, endTime } = clampRange(prefs.startTime, prefs.endTime, open, close);
@@ -122,6 +122,11 @@ export default function Home() {
         {noneFree && <p className="mt-3 text-sm text-muted">No available courts in this time range.</p>}
         <StatusLegend showUnknown={rows.some((r) => r.incomplete)} />
         <p className="mt-3 mb-6 text-xs text-muted">Tap an available slot to open that court&apos;s booking page for the day.</p>
+        {isAdmin && (
+          <a href="/admin" className="mb-8 inline-flex h-11 items-center text-sm font-medium text-accent">
+            Manage access →
+          </a>
+        )}
       </>
     );
   }

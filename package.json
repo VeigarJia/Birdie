@@ -10,10 +10,10 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "probe": "node --experimental-strip-types scripts/test-perfectmind.ts",
-    "icons": "osascript -l JavaScript scripts/generate-icons.js \"$PWD\"",
-    "key": "node scripts/new-access-key.mjs"
+    "icons": "osascript -l JavaScript scripts/generate-icons.js \"$PWD\""
   },
   "dependencies": {
+    "@upstash/redis": "1.41.0",
     "next": "16.4.6",
     "react": "19.3.1",
     "react-dom": "19.3.1"

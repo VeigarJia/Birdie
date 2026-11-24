@@ -1,6 +1,6 @@
 // Birdie service worker: caches the app shell only. Live availability (/api/*) is never cached,
 // and official PerfectMind pages are never touched (different origin).
-const VERSION = "birdie-v1";
+const VERSION = "birdie-v2";
 const SHELL = ["/", "/manifest.webmanifest", "/favicon.png", "/icons/icon-180.png", "/icons/icon-192.png"];
 
 self.addEventListener("install", (event) => {
@@ -22,7 +22,7 @@ self.addEventListener("fetch", (event) => {
   if (req.method !== "GET" || url.origin !== self.location.origin || url.pathname.startsWith("/api/")) return;
 
   // Page navigations: network first so updates show immediately, cached shell when offline.
-  if (req.mode === "navigate") {
+  if (req.mode === "navigate" && url.pathname === "/") {
     event.respondWith(
       fetch(req)
         .then((res) => {

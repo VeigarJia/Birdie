@@ -21,6 +21,8 @@ interface State {
  */
 export function useAvailability(date: string, accessKey: string | null, onUnauthorized: () => void) {
   const [state, setState] = useState<State>({ data: null, loading: false, error: null });
+  /** True when the current key is the owner (admin) key. */
+  const [isAdmin, setIsAdmin] = useState(false);
   const cacheRef = useRef(new Map<string, AvailabilityResponse>());
   const controllerRef = useRef<AbortController | null>(null);
   const dateRef = useRef(date);
@@ -62,6 +64,7 @@ export function useAvailability(date: string, accessKey: string | null, onUnauth
           }));
           return;
         }
+        setIsAdmin(res.headers.get("X-Birdie-Admin") === "1");
         const data = (await res.json()) as AvailabilityResponse;
         if (dateRef.current !== requestedDate || data.date !== requestedDate) return;
         cacheRef.current.set(requestedDate, data);
@@ -83,5 +86,5 @@ export function useAvailability(date: string, accessKey: string | null, onUnauth
 
   const refresh = useCallback(() => load(true), [load]);
 
-  return { ...state, refresh };
+  return { ...state, isAdmin, refresh };
 }

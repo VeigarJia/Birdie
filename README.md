@@ -136,57 +136,53 @@ Birdie 需要联网才能获取实时空场信息。恢复联网之前，预订�
 
 ```bash
 npm install
-cp .env.example .env.local      # then set BIRDIE_ACCESS_KEYS
+cp .env.example .env.local      # then set BIRDIE_ACCESS_KEY (and Upstash vars to test /admin)
 npm run dev                     # http://localhost:3000
 npm test                        # unit tests
 npm run typecheck
 npm run icons                   # regenerate PWA icons from 🏸 (macOS)
-npm run key -- <name>           # generate an access key for someone
 ```
 
 ## Deploy (Vercel)
 
 1. Import the GitHub repo into Vercel.
-2. Set the `BIRDIE_ACCESS_KEYS` environment variable (see below).
-3. Deploy. `vercel.json` pins Functions to `syd1` (Sydney).
-4. On iPhone, open the URL in Safari → Share → **Add to Home Screen**, then enter the key once.
+2. Set the `BIRDIE_ACCESS_KEY` environment variable (the owner key; `openssl rand -base64 32`).
+3. Connect an Upstash for Redis database under **Storage** (see Access keys below).
+4. Deploy. `vercel.json` pins Functions to `syd1` (Sydney).
+5. On iPhone, open the URL in Safari → Share → **Add to Home Screen**, then enter the key once.
 
 ## Access keys
 
-Every API request needs a key. Each person or group gets their own, so one can be revoked without affecting the others.
+There are two kinds of key:
 
-**Where they live**
+- **Owner key**: the `BIRDIE_ACCESS_KEY` environment variable in Vercel. It's yours. It uses Birdie and can manage everyone else's access.
+- **User keys**: one per person, created and revoked on the **Manage access** page. No terminal, no Vercel settings, no redeploy.
+
+**Give someone access**
+
+1. Open Birdie with the owner key and tap **Manage access →** at the bottom (or go to `/admin`).
+2. Type their name and tap **Create key**.
+3. Tap **Copy invite message** and send it to them. It contains the link, their key and install steps.
+
+The key is shown **only once**. If it's lost, revoke it and create a new one.
+
+**See who has access and who uses it**
+
+The Manage access page lists everyone with the date added, when they last used Birdie and how many requests they've made.
+
+**Revoke access**
+
+Tap **Revoke** next to their name. Their key stops working within a minute, and the app asks them for a new key. Nobody else is affected.
+
+**Where keys are stored**
 
 | Place | What |
 | --- | --- |
-| Vercel → Project → Settings → Environment Variables | `BIRDIE_ACCESS_KEYS`: the source of truth, as `name:key,name:key` |
-| Vercel (same page) | `BIRDIE_ACCESS_KEY`: optional legacy single key, logged as `owner` |
-| Each user's device | The key they typed, in that browser's LocalStorage |
-| `.env.local` (your machine, git-ignored) | Keys for local development only |
+| Vercel → Settings → Environment Variables | `BIRDIE_ACCESS_KEY`, the owner key |
+| Upstash Redis (connected to the Vercel project) | User keys as SHA-256 hashes only, plus usage counts. Key values can't be recovered from it |
+| Each user's device | The key they entered, in that browser's LocalStorage |
 
-**Add a key**
-
-1. Run `npm run key -- alice`. It prints a key for Alice and the entry `alice:<key>`.
-2. In Vercel, edit `BIRDIE_ACCESS_KEYS` and append `,alice:<key>` (comma-separated, no spaces needed).
-3. **Redeploy** (Deployments → ⋯ → Redeploy). Env changes only apply to new deployments.
-4. Send Alice the key.
-
-Names may use letters, digits, `-` and `_`. Keys must be at least 16 characters; the generator makes 43-character URL-safe keys with no `:` or `,`.
-
-**See existing keys**
-
-In Vercel, open Settings → Environment Variables and click the eye icon on `BIRDIE_ACCESS_KEYS`. Birdie itself never displays or logs key values.
-
-**See who is using Birdie**
-
-Vercel → Project → Logs. Each request logs the key's name, e.g. `[birdie] request key=alice date=2026-11-25`.
-
-**Revoke a key**
-
-1. In Vercel, edit `BIRDIE_ACCESS_KEYS` and delete that person's `name:key` entry.
-2. Redeploy.
-
-Their next request gets `401`, the app clears the stored key and asks for a new one. Everyone else keeps working.
+**One-time setup:** in Vercel, open the project → **Storage** → create or connect an **Upstash for Redis** database (pick the Sydney region), then redeploy. Until then, the owner key works but Manage access shows a setup message.
 
 ## How it works
 

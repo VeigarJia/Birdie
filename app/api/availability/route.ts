@@ -13,7 +13,7 @@ function error(status: number, code: string, message: string, retryable: boolean
 }
 
 export async function GET(request: Request) {
-  const auth = checkAccessKey(request.headers.get("authorization"));
+  const auth = await checkAccessKey(request.headers.get("authorization"));
   if (!auth.ok) return error(auth.status, auth.code, auth.message, false);
 
   const params = new URL(request.url).searchParams;
@@ -27,7 +27,8 @@ export async function GET(request: Request) {
 
   try {
     const data = await getAvailability(date!, { refresh });
-    return Response.json(data, { headers: { "Cache-Control": "no-store" } });
+    // Lets the app show the "Manage access" link to the owner only.
+    return Response.json(data, { headers: { "Cache-Control": "no-store", "X-Birdie-Admin": auth.admin ? "1" : "0" } });
   } catch (err) {
     console.error(`[birdie] /api/availability ${date}: ${(err as Error).message}`);
     if (err instanceof UpstreamError && err.status === 503) {
